@@ -5,6 +5,8 @@ import './App.css';
 function App() {
   const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
+  const [numberOfFornecedores, setNumberOfFornecedores] = useState(null);
+
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -32,10 +34,12 @@ function App() {
       }
 
       const data = await response.json();
+      setNumberOfFornecedores(data.length);
       setResult(data);
     } catch (error) {
       console.error('Erro ao chamar o serviço:', error.message);
       setResult(null);
+      setNumberOfFornecedores(null);
     }
   };
 
@@ -53,10 +57,15 @@ function App() {
       <Button variant="contained" color="primary" onClick={handleSubmit}>
         Processar
       </Button>
+      {numberOfFornecedores !== null && (
+        <Typography variant="h6" gutterBottom>
+          Total de Fornecedores: {numberOfFornecedores}
+        </Typography>
+      )}
       {result && (
         <div>
           <Typography variant="h5" gutterBottom>
-            Resultado:
+            Lista Produtos por Fornecedores
           </Typography>
           {result.map((fornecedorData, index) => (
             <Paper key={index} elevation={3} style={{ marginBottom: '16px', padding: '16px' }}>
