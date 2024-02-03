@@ -46,9 +46,10 @@ function App() {
               <table>
                 <thead>
                   <tr>
-                    {Object.keys(fornecedorData.Produtos[0]).map((header) => (
-                      <th key={header}>{header}</th>
-                    ))}
+                    {fornecedorData.Produtos.length > 0 &&
+                      Object.keys(fornecedorData.Produtos[0]).map((header) => (
+                        <th key={header}>{header}</th>
+                      ))}
                   </tr>
                 </thead>
                 <tbody>
