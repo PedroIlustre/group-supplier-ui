@@ -1,19 +1,30 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography, Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { Button, Container, Typography, Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, Input } from '@mui/material';
 import './App.css';
 
 function App() {
-  const [filePath, setFilePath] = useState('');
+  const [file, setFile] = useState(null);
   const [result, setResult] = useState(null);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
 
   const handleSubmit = async () => {
     try {
+      if (!file) {
+        throw new Error('Por favor, selecione um arquivo.');
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
       const response = await fetch('http://localhost:3000/process', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ filePath }),
+        body: formData,
       });
 
       if (!response.ok) {
@@ -33,13 +44,11 @@ function App() {
       <Typography variant="h4" gutterBottom>
         Processamento de CSV
       </Typography>
-      <TextField
-        label="Caminho do Arquivo CSV"
-        fullWidth
-        value={filePath}
-        onChange={(e) => setFilePath(e.target.value)}
+      <Input
+        type="file"
+        inputProps={{ accept: '.csv' }}
+        onChange={handleFileChange}
         margin="normal"
-        variant="outlined"
       />
       <Button variant="contained" color="primary" onClick={handleSubmit}>
         Processar
