@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { TextField, Button, Container, Typography, Paper, Table, TableContainer, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import './App.css';
 
 function App() {
@@ -28,45 +29,57 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Processamento de CSV</h1>
-      <label>
-        Caminho do Arquivo CSV:
-        <input type="text" value={filePath} onChange={(e) => setFilePath(e.target.value)} />
-      </label>
-      <button onClick={handleSubmit}>Processar</button>
+    <Container className="App" maxWidth="md">
+      <Typography variant="h4" gutterBottom>
+        Processamento de CSV
+      </Typography>
+      <TextField
+        label="Caminho do Arquivo CSV"
+        fullWidth
+        value={filePath}
+        onChange={(e) => setFilePath(e.target.value)}
+        margin="normal"
+        variant="outlined"
+      />
+      <Button variant="contained" color="primary" onClick={handleSubmit}>
+        Processar
+      </Button>
       {result && (
         <div>
-          <h2>Resultado:</h2>
+          <Typography variant="h5" gutterBottom>
+            Resultado:
+          </Typography>
           {result.map((fornecedorData, index) => (
-            <div key={index}>
-              <h3 style={{ backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}>
+            <Paper key={index} elevation={3} style={{ marginBottom: '16px', padding: '16px' }}>
+              <Typography variant="h6" style={{ marginBottom: '8px', backgroundColor: `#${Math.floor(Math.random() * 16777215).toString(16)}` }}>
                 {fornecedorData.Fornecedor}
-              </h3>
-              <table>
-                <thead>
-                  <tr>
-                    {fornecedorData.Produtos.length > 0 &&
-                      Object.keys(fornecedorData.Produtos[0]).map((header) => (
-                        <th key={header}>{header}</th>
-                      ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {fornecedorData.Produtos.map((produto, idx) => (
-                    <tr key={idx}>
-                      {Object.values(produto).map((value, i) => (
-                        <td key={i}>{value}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      {fornecedorData.Produtos.length > 0 &&
+                        Object.keys(fornecedorData.Produtos[0]).map((header) => (
+                          <TableCell key={header}>{header}</TableCell>
+                        ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {fornecedorData.Produtos.map((produto, idx) => (
+                      <TableRow key={idx}>
+                        {Object.values(produto).map((value, i) => (
+                          <TableCell key={i}>{value}</TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
           ))}
         </div>
       )}
-    </div>
+    </Container>
   );
 }
 
