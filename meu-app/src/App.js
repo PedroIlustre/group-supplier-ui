@@ -69,15 +69,15 @@ function App() {
                     <TableRow>
                       {fornecedorData.Produtos.length > 0 &&
                         Object.keys(fornecedorData.Produtos[0]).map((header) => (
-                          <TableCell key={header}>{header}</TableCell>
+                          header !== 'Descontinuado' && <TableCell key={header}>{header}</TableCell>
                         ))}
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {fornecedorData.Produtos.map((produto, idx) => (
                       <TableRow key={idx}>
-                        {Object.values(produto).map((value, i) => (
-                          <TableCell key={i}>{value}</TableCell>
+                        {Object.keys(produto).map((key) => (
+                          key !== 'Descontinuado' && <TableCell key={key}>{produto[key]}</TableCell>
                         ))}
                       </TableRow>
                     ))}
